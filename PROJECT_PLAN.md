@@ -14,9 +14,9 @@
 - [x] GitHub-CI für Lint, Typprüfung, Tests und Build vorhanden
 - [x] Letzter lokaler Qualitätslauf erfolgreich: 2/2 Tests und Produktionsbuild
 - [x] Supabase-Organisation **simple42science's Org** und Projekt **KüchenDuett** vorhanden
-- [x] Datenbankschema, RLS, Funktionen und RLS-Testdatei lokal vorbereitet
-- [ ] Supabase-CLI anmelden und mit dem vorhandenen Projekt verknüpfen
-- [ ] Migration per Dry-Run prüfen, anwenden und gegen Supabase testen
+- [x] Datenbankschema, RLS und Funktionen auf Supabase angewendet
+- [x] Alle elf Anwendungstabellen vorhanden; RLS bei allen elf Tabellen aktiviert
+- [x] Remote-Linter fehlerfrei; 9/9 selbstvalidierende RLS-Assertions bestanden und zurückgerollt
 - [ ] Anmeldung, Haushalt und echte App-Funktionen implementieren
 - [ ] GitHub Pages aktivieren und die App veröffentlichen
 
@@ -71,7 +71,7 @@ Nicht im MVP: KI, Barcode, Spracheingabe, Bild-/Kassenzettelerkennung, Push-Mitt
 
 Die Pakete werden in Reihenfolge umgesetzt. Ein Paket ist erst abgeschlossen, wenn seine offenen Punkte und Abnahmekriterien erfüllt sind.
 
-### AP 0 – Zugänge und Repository · teilweise erledigt
+### AP 0 – Zugänge und Repository · abgeschlossen
 
 **Codex:**
 
@@ -79,14 +79,14 @@ Die Pakete werden in Reihenfolge umgesetzt. Ein Paket ist erst abgeschlossen, we
 - [x] Remote `simple42science/K-chenDuett` verbunden
 - [x] GitHub-Berechtigung korrigiert; Fork ist nicht nötig
 - [x] `main` veröffentlicht und Upstream eingerichtet
-- [ ] Supabase-CLI-Anmeldung prüfen und Projekt **KüchenDuett** ermitteln
+- [x] Supabase-CLI-Anmeldung geprüft und Projekt **KüchenDuett** eindeutig ermittelt
 
 **Du:**
 
 - [x] GitHub-Browserfreigabe für `simple42science` bestätigt
 - [x] Öffentliches Repository bestätigt
-- [ ] Im Projektterminal `npx supabase login` ausführen und Browserfreigabe bestätigen
-- [ ] Project URL und Publishable-/Anon-Key später direkt in `.env.local` hinterlegen
+- [x] Im Projektterminal `npx supabase login` ausgeführt und Browserfreigabe bestätigt
+- [x] Keine Zugangstoken oder Datenbankpasswörter im Repository gespeichert
 
 **Fertig, wenn:** GitHub und Supabase CLI erreichbar sind, ohne dass ein Secret im Repository liegt.
 
@@ -108,7 +108,7 @@ Die Pakete werden in Reihenfolge umgesetzt. Ein Paket ist erst abgeschlossen, we
 
 **Abnahme:** `main` liegt auf GitHub; `npm run check` ist erfolgreich.
 
-### AP 2 – Supabase-Schema und Sicherheit · lokal vorbereitet
+### AP 2 – Supabase-Schema und Sicherheit · abgeschlossen
 
 **Codex:**
 
@@ -119,18 +119,21 @@ Die Pakete werden in Reihenfolge umgesetzt. Ein Paket ist erst abgeschlossen, we
 - [x] RLS-Policies für getrennte Haushalte erstellt
 - [x] Funktionen für Haushalt, Einladung, Menge, Undo und Löschung erstellt
 - [x] pgTAP/RLS-Test mit drei Identitäten geschrieben
-- [ ] Supabase-Projekt per CLI verknüpfen
-- [ ] `supabase db push --dry-run` prüfen
-- [ ] Migration auf **KüchenDuett** anwenden
-- [ ] `supabase db lint --linked` erfolgreich ausführen
-- [ ] `supabase test db --linked` erfolgreich ausführen
-- [ ] TypeScript-Datenbanktypen aus dem angewendeten Schema generieren
+- [x] Supabase-Projekt per CLI verknüpft
+- [x] `supabase db push --dry-run` geprüft: genau eine erwartete Migration
+- [x] Migration auf **KüchenDuett** angewendet
+- [x] Lokaler und Remote-Migrationsstand stimmen überein
+- [x] `supabase db lint --linked` ohne Schemafehler ausgeführt
+- [x] Docker-freien, transaktionalen Remote-RLS-Test ergänzt
+- [x] 9/9 Remote-Assertions bestanden; alle Testdaten zurückgerollt
+- [x] Elf Anwendungstabellen und elf aktivierte RLS-Tabellen separat verifiziert
+- [x] TypeScript-Datenbanktypen aus dem angewendeten Schema generiert
 
 **Du:**
 
-- [ ] `npx supabase login` ausführen
-- [ ] Falls verlangt, das Datenbankpasswort nur direkt im Terminal eingeben
-- [ ] Das Anwenden der neuen Migration bestätigen
+- [x] `npx supabase login` ausgeführt
+- [x] Browserfreigabe erteilt; ein Datenbankpasswort musste nicht geteilt werden
+- [x] Fortsetzung von AP2 bestätigt
 
 **Abnahme:** Migration, Linter und alle RLS-Tests laufen gegen das verknüpfte Projekt; ein fremder Haushalt erhält keinen Zugriff.
 
@@ -292,18 +295,16 @@ Für jede Erweiterung entscheidet **du** nur Nutzen und Budget; **Codex** übern
 - [ ] Export und Löschwege funktionieren mit klarer Bestätigung.
 - [x] Lokale Tests und Produktionsbuild bestehen im aktuellen Grundgerüst.
 - [x] Aktuell liegen keine geheimen Schlüssel im Repository oder Browser-Bundle.
-- [ ] RLS-Tests bestehen gegen das verknüpfte Supabase-Projekt.
+- [x] RLS-Tests bestehen gegen das verknüpfte Supabase-Projekt.
 - [ ] GitHub Pages veröffentlicht automatisch aus `main`.
 - [ ] Laufende Infrastrukturkosten bleiben bei 0 CHF.
 
 ## 7. Direkter nächster Schritt
 
-Du führst im Projektterminal nur diesen persönlichen Login aus:
+AP2 ist vollständig abgeschlossen. Der nächste Auftrag lautet:
 
-```powershell
-npx supabase login
-```
+> **„Mach AP3.“**
 
-Danach schreibst du **„Supabase ist angemeldet“**. Codex erledigt anschliessend die noch offenen Punkte aus AP2: Projekt finden/verknüpfen, Dry-Run, Migration, Linter, RLS-Tests und TypeScript-Typen.
+Codex bindet dann den Supabase-Client und die öffentlichen Projektwerte an, implementiert Anmeldung und Haushalt und nennt dir nur die unvermeidbaren Auth-/E-Mail-Bestätigungen.
 
 Referenzen: [GitHub Pages mit Actions](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) · [Supabase Auth Redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls)

@@ -47,7 +47,10 @@ npx supabase login
 npx supabase link --project-ref <PROJECT_REF>
 npx supabase db push --dry-run
 npx supabase db push
+npm run db:test:linked
 ```
+
+`db:test:linked` führt selbstvalidierende RLS-Assertions in einer Transaktion aus und rollt sämtliche Testdaten zurück. Der lokale pgTAP-Befehl `db:test` benötigt Docker.
 
 ## Deployment
 

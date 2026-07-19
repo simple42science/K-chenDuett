@@ -524,8 +524,22 @@ export type Database = {
           quantity_delta: number
           target_item_id: string
         }
-        Returns: Json
-      }
+          Returns: Json
+        }
+        create_inventory_item: {
+          Args: {
+            item_category: string
+            item_expires_on?: string | null
+            item_name: string
+            item_notes?: string | null
+            item_opened_on?: string | null
+            item_quantity: number
+            item_unit: string
+            target_household_id: string
+            target_storage_location_id: string
+          }
+          Returns: Json
+        }
       create_household: { Args: { household_name: string }; Returns: string }
       create_household_invitation: {
         Args: {
@@ -547,15 +561,39 @@ export type Database = {
         Args: { target_household_id: string; target_user_id: string }
         Returns: boolean
       }
-      leave_household: {
+        leave_household: {
         Args: { target_household_id: string }
-        Returns: undefined
-      }
+          Returns: undefined
+        }
+        merge_inventory_items: {
+          Args: {
+            source_expected_version: number
+            source_item_id: string
+            target_expected_version: number
+            target_item_id: string
+          }
+          Returns: Json
+        }
       normalize_name: { Args: { value: string }; Returns: string }
-      undo_inventory_transaction: {
+        undo_inventory_transaction: {
         Args: { target_transaction_id: string }
-        Returns: Json
-      }
+          Returns: Json
+        }
+        update_inventory_item: {
+          Args: {
+            expected_version: number
+            item_category: string
+            item_expires_on?: string | null
+            item_name: string
+            item_notes?: string | null
+            item_opened_on?: string | null
+            item_quantity: number
+            item_unit: string
+            target_item_id: string
+            target_storage_location_id: string
+          }
+          Returns: Json
+        }
       users_share_household: {
         Args: { first_user_id: string; second_user_id: string }
         Returns: boolean

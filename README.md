@@ -60,6 +60,9 @@ npm run db:test:linked
 
 ## Deployment
 
-Das Ziel ist GitHub Pages unter `/K-chenDuett/`. Der eigentliche Pages-Workflow wird in AP8 ergänzt; bis dahin prüft `.github/workflows/ci.yml` jeden Push und Pull Request.
+GitHub Pages veröffentlicht `main` automatisch unter
+`https://simple42science.github.io/K-chenDuett/`. Der Workflow nutzt ausschließlich die
+öffentlichen Repository Variables `VITE_SUPABASE_URL` und `VITE_SUPABASE_PUBLISHABLE_KEY`.
+CI prüft weiterhin jeden Push und Pull Request separat.
 
 Siehe [PROJECT_PLAN.md](./PROJECT_PLAN.md) für Umfang und Arbeitspakete.

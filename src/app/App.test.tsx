@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { HouseholdProvider } from '../features/household/HouseholdContext'
 import type { HouseholdSnapshot } from '../features/household/householdService'
+import { InventoryContext, type InventoryContextValue } from '../features/inventory/inventoryContextStore'
 import { App } from './App'
 
 const household: HouseholdSnapshot = {
@@ -12,12 +13,23 @@ const household: HouseholdSnapshot = {
   members: [],
 }
 
+const inventory: InventoryContextValue = {
+  items: [], locations: [], transactions: [], status: 'ready', realtimeStatus: 'connected', error: null,
+  refreshInventory: async () => undefined,
+  createItem: async () => { throw new Error('Nicht im App-Test verwendet') },
+  updateItem: async () => { throw new Error('Nicht im App-Test verwendet') },
+  changeQuantity: async () => { throw new Error('Nicht im App-Test verwendet') },
+  deleteItem: async () => { throw new Error('Nicht im App-Test verwendet') },
+  mergeItems: async () => { throw new Error('Nicht im App-Test verwendet') },
+  undoTransaction: async () => undefined,
+}
+
 function renderApp() {
   return render(
     <HouseholdProvider household={household} refreshHousehold={async () => undefined}>
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
+      <InventoryContext.Provider value={inventory}>
+        <MemoryRouter><App /></MemoryRouter>
+      </InventoryContext.Provider>
     </HouseholdProvider>,
   )
 }

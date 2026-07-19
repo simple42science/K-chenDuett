@@ -1,7 +1,9 @@
+import type { ReactNode } from 'react'
+
 type EmptyStateProps = {
   icon: string
   title: string
-  children: string
+  children: ReactNode
 }
 
 export function EmptyState({ icon, title, children }: EmptyStateProps) {

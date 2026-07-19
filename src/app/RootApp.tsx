@@ -3,6 +3,7 @@ import { AppLoading } from './AppLoading'
 import { AuthPage } from '../features/auth/AuthPage'
 import { useAuth } from '../features/auth/useAuth'
 import { HouseholdGate } from '../features/household/HouseholdGate'
+import { InventoryProvider } from '../features/inventory/InventoryProvider'
 
 export function RootApp() {
   const { status, error } = useAuth()
@@ -26,7 +27,9 @@ export function RootApp() {
 
   return (
     <HouseholdGate>
-      <App />
+      <InventoryProvider>
+        <App />
+      </InventoryProvider>
     </HouseholdGate>
   )
 }

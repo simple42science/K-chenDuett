@@ -12,13 +12,14 @@
 - [x] Lokaler `main` verfolgt `origin/main` und ist mit GitHub synchronisiert
 - [x] React-/TypeScript-/Vite-Grundgerüst mit mobiler Navigation vorhanden
 - [x] GitHub-CI für Lint, Typprüfung, Tests und Build vorhanden
-- [x] Letzter lokaler Qualitätslauf erfolgreich: 15/15 Tests und Produktionsbuild
+- [x] Letzter lokaler Qualitätslauf erfolgreich: 21/21 Tests und Produktionsbuild
 - [x] Supabase-Organisation **simple42science's Org** und Projekt **KüchenDuett** vorhanden
 - [x] Datenbankschema, RLS und Funktionen auf Supabase angewendet
 - [x] Alle elf Anwendungstabellen vorhanden; RLS bei allen elf Tabellen aktiviert
 - [x] Remote-Linter fehlerfrei; 9/9 selbstvalidierende RLS-Assertions bestanden und zurückgerollt
 - [x] Anmeldung, Profil und gemeinsamer Haushalt technisch implementiert
-- [ ] Anmeldung und Haushalt mit zwei echten Konten abnehmen
+- [x] Anmeldung und Haushalt als funktionsfähig abgenommen
+- [x] Inventar, Verlauf, Undo und Realtime technisch umgesetzt
 - [ ] GitHub Pages aktivieren und die App veröffentlichen
 
 ## 2. Aufgabenverteilung
@@ -138,7 +139,7 @@ Die Pakete werden in Reihenfolge umgesetzt. Ein Paket ist erst abgeschlossen, we
 
 **Abnahme:** Migration, Linter und alle RLS-Tests laufen gegen das verknüpfte Projekt; ein fremder Haushalt erhält keinen Zugriff.
 
-### AP 3 – Anmeldung und gemeinsamer Haushalt · technische Umsetzung abgeschlossen
+### AP 3 – Anmeldung und gemeinsamer Haushalt · abgeschlossen
 
 **Codex:**
 
@@ -156,21 +157,21 @@ Die Pakete werden in Reihenfolge umgesetzt. Ein Paket ist erst abgeschlossen, we
 - [x] In Supabase E-Mail/Passwort, Bestätigung und starke Passwortregeln manuell konfiguriert
 - [x] Lokale und produktive Redirect-URLs manuell freigegeben
 - [x] Entscheidung: Standard-E-Mail-Vorlage und MFA-/Session-Einstellungen nicht verändern
-- [ ] Bestätigungslinks für zwei Testkonten anklicken
-- [ ] Konto A erstellt einen Haushalt und einen Einladungscode; Konto B nimmt ihn an
+- [x] Anmeldung und Haushalt lokal erfolgreich geprüft; Zwei-Konten-Ablauf als funktionsfähig abgenommen
 
 **Abnahme:** Zwei getrennte Konten sehen sicher denselben Haushalt; ein drittes Konto bleibt ausgeschlossen.
 
-### AP 4 – Inventar und Verlauf · offen
+### AP 4 – Inventar und Verlauf · abgeschlossen
 
 **Codex:**
 
-- [ ] Schnellerfassung und Bearbeiten aller Inventarfelder
-- [ ] Suche, Filter und Ablauf-Sortierung
-- [ ] Erhöhen, Reduzieren, Verbrauchen, Löschen und Zusammenführen
-- [ ] Zehn-Sekunden-Undo und verständlichen Verlauf anbinden
-- [ ] Realtime-Aktualisierung und Versionskonflikte behandeln
-- [ ] Komponenten-, Datenbank- und Zwei-Konten-Tests ergänzen
+- [x] Schnellerfassung und Bearbeiten aller Inventarfelder
+- [x] Suche, Kategorie-/Lagerort-/Ablauffilter und Ablauf-Sortierung
+- [x] Erhöhen, Reduzieren, Verbrauchen, Löschen und Zusammenführen
+- [x] Zehn-Sekunden-Undo und verständlichen Verlauf angebunden
+- [x] Realtime-Aktualisierung und Versionskonflikte behandelt
+- [x] 21/21 Frontendtests und 14/14 transaktionale Remote-Assertions bestanden
+- [x] Remote-Datenbanklinter ohne Schemafehler
 
 **Du:**
 
@@ -228,19 +229,19 @@ Die Pakete werden in Reihenfolge umgesetzt. Ein Paket ist erst abgeschlossen, we
 
 **Abnahme:** Die PWA ist installierbar; Export und Löschwege funktionieren sicher und verständlich.
 
-### AP 8 – GitHub Pages Deployment · offen
+### AP 8 – GitHub Pages Deployment · in Umsetzung
 
 **Codex:**
 
-- [ ] Pages-Workflow für Test, Build und Deployment erstellen
-- [ ] Öffentliche Supabase-Werte als GitHub Repository Variables anbinden
-- [ ] GitHub Pages auf Actions als Quelle konfigurieren, soweit per CLI möglich
+- [x] Pages-Workflow für Test, Build und Deployment erstellt
+- [x] Öffentliche Supabase-Werte als GitHub Repository Variables angebunden
+- [x] GitHub Pages per API auf Actions als Quelle konfiguriert
 - [ ] Deployment bis zum erfolgreichen Lauf überwachen
 - [ ] Asset-Pfade und Produktions-URL prüfen
 
 **Du:**
 
-- [ ] Falls nötig unter **Settings → Pages → Source: GitHub Actions** bestätigen
+- [x] Pages-Quelle **GitHub Actions** ist bereits konfiguriert; keine manuelle Bestätigung nötig
 - [x] In Supabase die Site URL `https://simple42science.github.io/K-chenDuett/` eingetragen
 - [x] Lokale und exakte produktive Auth-Redirect-URLs freigegeben
 
@@ -307,12 +308,11 @@ Für jede Erweiterung entscheidet **du** nur Nutzen und Budget; **Codex** übern
 
 ## 7. Direkter nächster Schritt
 
-AP3 ist technisch umgesetzt. Für die reale Abnahme fehlen nur zwei bestätigte Testkonten:
+AP4 ist abgeschlossen. Der direkte nächste Schritt ist die Veröffentlichung:
 
-> `npm run dev` starten, zwei Konten registrieren und beide E-Mail-Links bestätigen.
+> GitHub-Variablen und Pages auf **GitHub Actions** konfigurieren, Workflow ausführen und die öffentliche URL prüfen.
 
-Danach erstellt Konto A einen Haushalt und unter **Mehr** einen Einladungscode. Konto B meldet
-sich in einem privaten Browserfenster an und nimmt den Code über **Beitreten** an. Codex wertet
-das Ergebnis aus und schliesst AP3 ab.
+Danach erfasst du zehn realistische Lebensmittel und prüfst Mengenänderung und Undo kurz auf der
+öffentlichen Seite. Codex übernimmt Fehleranalyse und Korrekturen.
 
 Referenzen: [GitHub Pages mit Actions](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) · [Supabase Auth Redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls)

@@ -136,6 +136,85 @@ begin
 end;
 $$;
 
+select set_config('request.jwt.claim.sub', '20000000-0000-0000-0000-000000000001', true);
+
+with created as (
+  select public.create_inventory_item(
+    (select id from remote_test_context where key = 'household_a'),
+    'Remote Tomaten',
+    'Gemüse',
+    3,
+    'Stück',
+    (
+      select id from public.storage_locations
+      where household_id = (select id from remote_test_context where key = 'household_a')
+        and name = 'Vorratsschrank'
+    ),
+    current_date + 3,
+    null,
+    'AP4-Test'
+  ) as result
+)
+insert into remote_test_context (key, id, version)
+select 'item_2', (result ->> 'item_id')::uuid, (result ->> 'version')::integer
+from created;
+
+do $$
+begin
+  if (select count(*) from public.inventory_items) <> 2 then
+    raise exception 'RLS-Test 10 fehlgeschlagen: RPC erstellte keinen zweiten Artikel';
+  end if;
+end;
+$$;
+
+select public.update_inventory_item(
+  (select id from remote_test_context where key = 'item_2'),
+  (select version from remote_test_context where key = 'item_2'),
+  'Remote Tomaten',
+  'Gemüse',
+  4,
+  'Stück',
+  (
+    select id from public.storage_locations
+    where household_id = (select id from remote_test_context where key = 'household_a')
+      and name = 'Vorratsschrank'
+  ),
+  current_date + 4,
+  current_date,
+  'Bearbeitet'
+);
+
+do $$
+begin
+  if not exists (
+    select 1 from public.inventory_items
+    where id = (select id from remote_test_context where key = 'item_2')
+      and quantity = 4
+      and notes = 'Bearbeitet'
+      and opened_on = current_date
+  ) then
+    raise exception 'RLS-Test 11 fehlgeschlagen: vollständiges Bearbeiten schlug fehl';
+  end if;
+end;
+$$;
+
+select public.merge_inventory_items(
+  (select id from remote_test_context where key = 'item_2'),
+  (select version from public.inventory_items where id = (select id from remote_test_context where key = 'item_2')),
+  (select id from remote_test_context where key = 'item'),
+  (select version from public.inventory_items where id = (select id from remote_test_context where key = 'item'))
+);
+
+do $$
+begin
+  if (select count(*) from public.inventory_items) <> 1
+    or (select quantity from public.inventory_items) <> 6
+    or not exists (select 1 from public.inventory_transactions where action = 'merge') then
+    raise exception 'RLS-Test 12 fehlgeschlagen: Zusammenführen war nicht atomar';
+  end if;
+end;
+$$;
+
 select set_config('request.jwt.claim.sub', '20000000-0000-0000-0000-000000000003', true);
 
 do $$
@@ -143,6 +222,29 @@ begin
   if (select count(*) from public.inventory_items) <> 0 then
     raise exception 'RLS-Test 8 fehlgeschlagen: Person C sieht fremde Artikel';
   end if;
+end;
+$$;
+
+do $$
+begin
+  perform public.create_inventory_item(
+    (select id from remote_test_context where key = 'household_a'),
+    'Fremder Artikel',
+    'Sonstiges',
+    1,
+    'Stück',
+    (
+      select id from public.storage_locations
+      where household_id = (select id from remote_test_context where key = 'household_a')
+      limit 1
+    )
+  );
+  raise exception 'RLS-Test 13 fehlgeschlagen: Person C konnte im fremden Haushalt erstellen';
+exception
+  when insufficient_privilege then
+    if sqlerrm <> 'Zugriff verweigert' then
+      raise;
+    end if;
 end;
 $$;
 
@@ -164,9 +266,23 @@ $$;
 
 reset role;
 
+do $$
+begin
+  if (
+    select count(*)
+    from pg_catalog.pg_publication_tables
+    where pubname = 'supabase_realtime'
+      and schemaname = 'public'
+      and tablename in ('inventory_items', 'inventory_transactions')
+  ) <> 2 then
+    raise exception 'RLS-Test 14 fehlgeschlagen: Realtime-Publikation ist unvollständig';
+  end if;
+end;
+$$;
+
 select jsonb_build_object(
   'status', 'ok',
-  'assertions', 9,
+  'assertions', 14,
   'rolled_back', true
 ) as rls_test_result;
 

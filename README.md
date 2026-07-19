@@ -12,7 +12,7 @@ Copy-Item .env.example .env.local
 npm run dev
 ```
 
-Die App ist danach standardmässig unter `http://localhost:5173` erreichbar.
+Die App ist danach unter `http://localhost:5173/K-chenDuett/` erreichbar.
 
 ## Prüfungen
 
@@ -20,7 +20,9 @@ Die App ist danach standardmässig unter `http://localhost:5173` erreichbar.
 npm run check
 ```
 
-Der Befehl führt Lint, TypeScript-Prüfung, Tests und den Produktionsbuild aus.
+Der Befehl führt Lint, TypeScript-Prüfung, Tests und den Produktionsbuild vollständig in der
+Sandbox aus. Vite nutzt dafür den nativen Config-Loader; Vitest arbeitet mit einem einzelnen
+Worker-Thread statt mit Kindprozessen.
 
 ## Supabase
 
@@ -30,6 +32,10 @@ Der Befehl führt Lint, TypeScript-Prüfung, Tests und den Produktionsbuild aus.
 - `VITE_SUPABASE_PUBLISHABLE_KEY`
 
 Secret-/Service-Role-Keys dürfen niemals in eine `VITE_*`-Variable, den Browser oder das Repository gelangen. Datenbankänderungen liegen unter `supabase/migrations`.
+
+Für Auth müssen in Supabase die Site URL `https://simple42science.github.io/K-chenDuett/`
+sowie die lokalen Redirects `http://localhost:5173/**` und `http://127.0.0.1:5173/**`
+freigegeben sein. Diese Einstellungen werden bewusst manuell im Dashboard verwaltet.
 
 Für den vollständigen lokalen Datenbanklauf wird Docker benötigt:
 
@@ -54,6 +60,6 @@ npm run db:test:linked
 
 ## Deployment
 
-Das Ziel ist GitHub Pages unter `/K-chenDuett/`. Der eigentliche Pages-Workflow wird in AP7 ergänzt; bis dahin prüft `.github/workflows/ci.yml` jeden Push und Pull Request.
+Das Ziel ist GitHub Pages unter `/K-chenDuett/`. Der eigentliche Pages-Workflow wird in AP8 ergänzt; bis dahin prüft `.github/workflows/ci.yml` jeden Push und Pull Request.
 
 Siehe [PROJECT_PLAN.md](./PROJECT_PLAN.md) für Umfang und Arbeitspakete.

@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { useHousehold } from '../features/household/useHousehold'
 
 const navigation = [
   { to: '/', label: 'Heute', symbol: '⌂', end: true },
@@ -8,6 +9,8 @@ const navigation = [
 ] as const
 
 export function AppShell() {
+  const { household } = useHousehold()
+
   return (
     <div className="app-shell">
       <header className="topbar">
@@ -21,7 +24,7 @@ export function AppShell() {
           </span>
         </NavLink>
         <span className="status-pill">
-          <span aria-hidden="true" /> Grundlage bereit
+          <span aria-hidden="true" /> {household.name}
         </span>
       </header>
 

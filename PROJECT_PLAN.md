@@ -12,12 +12,13 @@
 - [x] Lokaler `main` verfolgt `origin/main` und ist mit GitHub synchronisiert
 - [x] React-/TypeScript-/Vite-Grundgerüst mit mobiler Navigation vorhanden
 - [x] GitHub-CI für Lint, Typprüfung, Tests und Build vorhanden
-- [x] Letzter lokaler Qualitätslauf erfolgreich: 2/2 Tests und Produktionsbuild
+- [x] Letzter lokaler Qualitätslauf erfolgreich: 15/15 Tests und Produktionsbuild
 - [x] Supabase-Organisation **simple42science's Org** und Projekt **KüchenDuett** vorhanden
 - [x] Datenbankschema, RLS und Funktionen auf Supabase angewendet
 - [x] Alle elf Anwendungstabellen vorhanden; RLS bei allen elf Tabellen aktiviert
 - [x] Remote-Linter fehlerfrei; 9/9 selbstvalidierende RLS-Assertions bestanden und zurückgerollt
-- [ ] Anmeldung, Haushalt und echte App-Funktionen implementieren
+- [x] Anmeldung, Profil und gemeinsamer Haushalt technisch implementiert
+- [ ] Anmeldung und Haushalt mit zwei echten Konten abnehmen
 - [ ] GitHub Pages aktivieren und die App veröffentlichen
 
 ## 2. Aufgabenverteilung
@@ -137,21 +138,26 @@ Die Pakete werden in Reihenfolge umgesetzt. Ein Paket ist erst abgeschlossen, we
 
 **Abnahme:** Migration, Linter und alle RLS-Tests laufen gegen das verknüpfte Projekt; ein fremder Haushalt erhält keinen Zugriff.
 
-### AP 3 – Anmeldung und gemeinsamer Haushalt · offen
+### AP 3 – Anmeldung und gemeinsamer Haushalt · technische Umsetzung abgeschlossen
 
 **Codex:**
 
-- [ ] Supabase-Client und validierte Umgebungsvariablen anbinden
-- [ ] Registrierung, Login, Logout und Session-Wiederaufnahme implementieren
-- [ ] Profil und geschützte Routen implementieren
-- [ ] Haushalt erstellen sowie Einladung erzeugen/annehmen
-- [ ] Lade-, Fehler- und abgelaufene Einladungszustände testen
+- [x] Supabase-Client und validierte Umgebungsvariablen angebunden
+- [x] Registrierung, Login, Logout und Session-Wiederaufnahme implementiert
+- [x] Profil und geschützte Routen implementiert
+- [x] Haushalt erstellen sowie Einladung erzeugen/annehmen implementiert
+- [x] Einmalige Einladungscodes nur gehasht speichern und auf 24 Stunden begrenzen
+- [x] Lade-, Fehler- und abgelaufene Einladungszustände getestet
+- [x] Sandbox-sicheren Test- und Buildlauf ohne Kindprozesse eingerichtet
+- [x] 15/15 Tests, Lint, Typprüfung und Produktionsbuild erfolgreich
 
 **Du:**
 
-- [ ] In Supabase E-Mail/Passwort und E-Mail-Bestätigung nach Anleitung konfigurieren
-- [ ] Lokale Redirect-URL `http://localhost:5173/**` freigeben
+- [x] In Supabase E-Mail/Passwort, Bestätigung und starke Passwortregeln manuell konfiguriert
+- [x] Lokale und produktive Redirect-URLs manuell freigegeben
+- [x] Entscheidung: Standard-E-Mail-Vorlage und MFA-/Session-Einstellungen nicht verändern
 - [ ] Bestätigungslinks für zwei Testkonten anklicken
+- [ ] Konto A erstellt einen Haushalt und einen Einladungscode; Konto B nimmt ihn an
 
 **Abnahme:** Zwei getrennte Konten sehen sicher denselben Haushalt; ein drittes Konto bleibt ausgeschlossen.
 
@@ -235,8 +241,8 @@ Die Pakete werden in Reihenfolge umgesetzt. Ein Paket ist erst abgeschlossen, we
 **Du:**
 
 - [ ] Falls nötig unter **Settings → Pages → Source: GitHub Actions** bestätigen
-- [ ] In Supabase die Site URL `https://simple42science.github.io/K-chenDuett/` eintragen
-- [ ] Lokale und exakte produktive Auth-Redirect-URLs freigeben
+- [x] In Supabase die Site URL `https://simple42science.github.io/K-chenDuett/` eingetragen
+- [x] Lokale und exakte produktive Auth-Redirect-URLs freigegeben
 
 **Abnahme:** Die Produktions-URL lädt; Login funktioniert; jeder erfolgreiche Push auf `main` veröffentlicht automatisch.
 
@@ -301,10 +307,12 @@ Für jede Erweiterung entscheidet **du** nur Nutzen und Budget; **Codex** übern
 
 ## 7. Direkter nächster Schritt
 
-AP2 ist vollständig abgeschlossen. Der nächste Auftrag lautet:
+AP3 ist technisch umgesetzt. Für die reale Abnahme fehlen nur zwei bestätigte Testkonten:
 
-> **„Mach AP3.“**
+> `npm run dev` starten, zwei Konten registrieren und beide E-Mail-Links bestätigen.
 
-Codex bindet dann den Supabase-Client und die öffentlichen Projektwerte an, implementiert Anmeldung und Haushalt und nennt dir nur die unvermeidbaren Auth-/E-Mail-Bestätigungen.
+Danach erstellt Konto A einen Haushalt und unter **Mehr** einen Einladungscode. Konto B meldet
+sich in einem privaten Browserfenster an und nimmt den Code über **Beitreten** an. Codex wertet
+das Ergebnis aus und schliesst AP3 ab.
 
 Referenzen: [GitHub Pages mit Actions](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) · [Supabase Auth Redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls)

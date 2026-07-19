@@ -1,200 +1,288 @@
-# KüchenDuett – kompakter Veröffentlichungsplan
+# KüchenDuett – Projekt- und Veröffentlichungsplan
 
-> Stand: 19. Juli 2026  
-> Ziel: Eine nutzbare mobile Webapp für zwei Personen mit **GitHub Pages + Supabase** veröffentlichen.
+> Stand: 19. Juli 2026
+>
+> Ziel: Eine sichere mobile Webapp für zwei Personen mit **GitHub Pages + Supabase** veröffentlichen.
+>
+> Legende: `[x]` erledigt · `[ ]` offen
 
 ## 1. Aktueller Stand
 
-- Supabase-Organisation vorhanden: **simple42science's Org**
-- Supabase-Projekt vorhanden: **KüchenDuett**
-- Lokal existiert noch keine App und kein funktionsfähiges Git-Repository.
-- Die GitHub-CLI kennt das Konto `YannickLuca`, muss aber neu angemeldet werden.
-- Einzige Projektdatei ist aktuell dieser Plan.
+- [x] Öffentliches Repository erstellt: [simple42science/K-chenDuett](https://github.com/simple42science/K-chenDuett)
+- [x] Lokaler `main` verfolgt `origin/main` und ist mit GitHub synchronisiert
+- [x] React-/TypeScript-/Vite-Grundgerüst mit mobiler Navigation vorhanden
+- [x] GitHub-CI für Lint, Typprüfung, Tests und Build vorhanden
+- [x] Letzter lokaler Qualitätslauf erfolgreich: 2/2 Tests und Produktionsbuild
+- [x] Supabase-Organisation **simple42science's Org** und Projekt **KüchenDuett** vorhanden
+- [x] Datenbankschema, RLS, Funktionen und RLS-Testdatei lokal vorbereitet
+- [ ] Supabase-CLI anmelden und mit dem vorhandenen Projekt verknüpfen
+- [ ] Migration per Dry-Run prüfen, anwenden und gegen Supabase testen
+- [ ] Anmeldung, Haushalt und echte App-Funktionen implementieren
+- [ ] GitHub Pages aktivieren und die App veröffentlichen
 
-## 2. Klare Aufgabenverteilung
+## 2. Aufgabenverteilung
 
-**Codex übernimmt:** Architektur, App-Code, Datenbankschema, Migrationen, RLS-Sicherheit, Tests, Git, GitHub Actions, Deployment-Konfiguration, Fehlerbehebung und Dokumentation.
+**Codex übernimmt:** App-Code, Datenbankmigrationen, RLS, Tests, Git, CI/CD, Deployment, Fehlersuche und Dokumentation.
 
-**Du übernimmst nur:** persönliche Logins/Freigaben, das sichere Hinterlegen von Zugangsdaten, E-Mail-Bestätigungen sowie kurze Tests mit zwei Konten und auf dem Smartphone.
+**Du übernimmst nur:** persönliche Logins/Freigaben, E-Mail-Bestätigungen, sichere Eingabe von Zugangsdaten und kurze Tests mit zwei Konten bzw. auf dem Smartphone.
 
-Geheimnisse werden nie in Chat oder GitHub eingegeben. Der Supabase-`service_role`-/Secret-Key darf niemals ins Frontend. Die Supabase-Projekt-URL und der Publishable-/Anon-Key sind dagegen für Browser-Apps vorgesehen.
+Der Supabase-Secret-/Service-Role-Key darf niemals ins Frontend, in den Chat oder ins Repository. Im Browser werden ausschliesslich Project URL und Publishable-/Anon-Key verwendet; die Sicherheit kommt durch RLS.
 
-## 3. Umfang der ersten Veröffentlichung
-
-Die erste Version enthält nur:
+## 3. MVP-Umfang
 
 - Registrierung und Anmeldung per E-Mail/Passwort
 - zwei getrennte Konten in einem gemeinsamen Haushalt
 - Einladung der zweiten Person per einmaligem Code
 - Lebensmittel anlegen, bearbeiten, suchen und filtern
-- Menge erhöhen/reduzieren, verbrauchen und löschen
-- Ablaufdatum, Lagerort und Anzeige bald ablaufender Lebensmittel
-- zehn Sekunden „Rückgängig“ und kurzer Änderungsverlauf
-- bearbeitbare Küchengeräte
-- gespeicherte Rezepte und einfache Vorschläge anhand vorhandener Zutaten
+- Mengen erhöhen/reduzieren, verbrauchen, löschen und kurz rückgängig machen
+- Lagerorte, Ablaufdaten, Ablaufwarnungen und Änderungsverlauf
+- gemeinsame, bearbeitbare Küchengeräte
+- gespeicherte Rezepte, Favoriten und Vorschläge anhand des Inventars
 - installierbare mobile PWA
 - JSON-Export, Inventar leeren, Haushalt/Konto löschen
 
-Nicht Teil dieser Veröffentlichung: KI, Barcode, Spracheingabe, Foto-/Kassenzettelerkennung, Push-Mitteilungen und vollständiges Offline-Schreiben.
+Nicht im MVP: KI, Barcode, Spracheingabe, Bild-/Kassenzettelerkennung, Push-Mitteilungen und vollständiges Offline-Schreiben.
 
-## 4. Feste Technikentscheidungen
+## 4. Technik und Datenmodell
 
-- **Frontend:** React, TypeScript und Vite
-- **Navigation:** Hash-Routing, damit direkte Aufrufe auf GitHub Pages nicht mit 404 enden
-- **Backend:** bestehendes Supabase-Projekt für Auth, PostgreSQL und Realtime
-- **Sicherheit:** Row Level Security auf allen Haushaltsdaten
-- **Hosting:** GitHub Pages
-- **Deployment:** GitHub Actions bei jedem Push auf `main`
-- **Repository:** `K-chenDuett`, öffentlich für kostenloses GitHub Pages
-- **Produktions-URL:** `https://simple42science.github.io/K-chenDuett/`
-- **Kosten:** 0 CHF/Monat innerhalb der kostenlosen Kontingente; keine Domain und keine KI-API
+- **Frontend:** React, TypeScript, Vite, Hash-Routing
+- **Backend:** bestehendes Supabase-Projekt mit Auth, PostgreSQL und Realtime
+- **Sicherheit:** RLS auf allen Haushaltsdaten; atomare Datenbankfunktionen
+- **Hosting:** GitHub Pages unter `https://simple42science.github.io/K-chenDuett/`
+- **Deployment:** GitHub Actions bei Push auf `main`
+- **Vite-Basispfad:** `/K-chenDuett/`
+- **Kosten-Ziel:** 0 CHF/Monat ohne Domain und KI-API
 
-Vite erhält den Basis-Pfad `/K-chenDuett/`. Dynamische Inventardaten werden nicht vom Service Worker gecacht; offline startet nur die App-Oberfläche. GitHub Pages veröffentlicht das gebaute `dist`-Verzeichnis über einen offiziellen Actions-Workflow.
+| Tabelle | Zweck | Stand |
+|---|---|---|
+| `profiles` | Anzeigenamen | [x] Migration |
+| `households` | gemeinsamer Haushalt | [x] Migration |
+| `household_members` | Konten im Haushalt | [x] Migration |
+| `household_invitations` | einmalige Einladungen | [x] Migration |
+| `storage_locations` | Lagerorte | [x] Migration |
+| `inventory_items` | Lebensmittelbestand | [x] Migration |
+| `inventory_transactions` | Verlauf und Undo | [x] Migration |
+| `equipment` | Küchengeräte | [x] Migration |
+| `recipes` | gespeicherte Rezepte | [x] Migration |
+| `recipe_ingredients` | Rezeptzutaten | [x] Migration |
+| `favorite_recipes` | gemeinsame Favoriten | [x] Migration |
 
-## 5. Minimales Datenmodell
+## 5. Arbeitspakete
 
-| Tabelle | Zweck |
-|---|---|
-| `profiles` | Anzeigename zum Supabase-Konto |
-| `households` | gemeinsamer Haushalt |
-| `household_members` | Zuordnung der beiden Konten |
-| `household_invitations` | einmalige, ablaufende Einladungscodes |
-| `storage_locations` | Kühlschrank, Tiefkühler, Schränke, Keller usw. |
-| `inventory_items` | Lebensmittel, Menge, Einheit, Lagerort und Daten |
-| `inventory_transactions` | Änderungen und Rückgängig-Funktion |
-| `equipment` | normale und spezielle Küchengeräte |
-| `recipes` | gespeicherte Rezepte |
-| `recipe_ingredients` | strukturierte Rezeptzutaten |
-| `favorite_recipes` | gemeinsame Favoriten |
+Die Pakete werden in Reihenfolge umgesetzt. Ein Paket ist erst abgeschlossen, wenn seine offenen Punkte und Abnahmekriterien erfüllt sind.
 
-Jede Fachtabelle erhält eine Haushaltszuordnung. Mitglieder sehen und ändern nur Daten ihres Haushalts. Mengenänderungen, Undo, Einladung und endgültige Löschungen laufen atomar über geprüfte Datenbankfunktionen. Ein Testkonto aus einem anderen Haushalt muss bei allen Lese- und Schreibversuchen abgewiesen werden.
+### AP 0 – Zugänge und Repository · teilweise erledigt
 
-## 6. Heutiger Plan bis zur Veröffentlichung
+**Codex:**
 
-Die Arbeitspakete werden in dieser Reihenfolge erledigt. Codex arbeitet jeweils selbstständig bis zur Abnahme oder bis eine persönliche Anmeldung/Freigabe nötig ist.
-
-### AP 0 – Zugänge freigeben
+- [x] Git lokal initialisiert
+- [x] Remote `simple42science/K-chenDuett` verbunden
+- [x] GitHub-Berechtigung korrigiert; Fork ist nicht nötig
+- [x] `main` veröffentlicht und Upstream eingerichtet
+- [ ] Supabase-CLI-Anmeldung prüfen und Projekt **KüchenDuett** ermitteln
 
 **Du:**
 
-1. In PowerShell `gh auth refresh -h github.com` ausführen und das Konto `YannickLuca` erneut autorisieren.
-2. Bestätigen, dass das Repository `K-chenDuett` öffentlich sein darf. Bei GitHub Free ist das für kostenloses GitHub Pages erforderlich.
-3. Im Supabase-Dashboard bereithalten: Project URL und Publishable-/Anon-Key. Keinen Secret-/Service-Role-Key teilen.
-4. Falls Codex das Supabase-Projekt direkt verknüpfen soll, die Supabase-CLI persönlich anmelden; Codex gibt dafür bei Bedarf den exakten Befehl aus.
+- [x] GitHub-Browserfreigabe für `simple42science` bestätigt
+- [x] Öffentliches Repository bestätigt
+- [ ] Im Projektterminal `npx supabase login` ausführen und Browserfreigabe bestätigen
+- [ ] Project URL und Publishable-/Anon-Key später direkt in `.env.local` hinterlegen
 
-**Codex:** Danach GitHub- und Supabase-Zugriff prüfen. Keine geheimen Werte ausgeben oder committen.
+**Fertig, wenn:** GitHub und Supabase CLI erreichbar sind, ohne dass ein Secret im Repository liegt.
 
-**Fertig, wenn:** `gh auth status` erfolgreich ist und die Projektwerte sicher lokal verfügbar sind.
-
-### AP 1 – Repository und App-Grundgerüst
+### AP 1 – App-Grundgerüst · abgeschlossen
 
 **Codex:**
 
-- Git-Repository initialisieren und GitHub-Repository `K-chenDuett` erstellen/verbinden
-- React-/TypeScript-/Vite-App einrichten
-- mobile Navigation, Hash-Router, Fehlerzustände und Grunddesign erstellen
-- `.gitignore`, `.env.example`, README, Tests und Produktionsbuild einrichten
-- Vite-Basis-Pfad für GitHub Pages konfigurieren
+- [x] React, TypeScript und Vite eingerichtet
+- [x] Mobile Navigation und Hash-Routing erstellt
+- [x] Grunddesign, Leer- und Fehlerzustände erstellt
+- [x] `.gitignore`, `.env.example`, README und Lockdatei erstellt
+- [x] Unit-/Komponententest-Basis eingerichtet
+- [x] GitHub-CI für Lint, Typprüfung, Tests und Build erstellt
+- [x] Vite-Basispfad an `K-chenDuett` angepasst
+- [x] Lokale Prüfungen erfolgreich ausgeführt
+- [x] Stand nach GitHub gepusht
 
-**Du:** Nur die Erstellung bzw. Verbindung des öffentlichen GitHub-Repositories bestätigen, falls GitHub danach fragt.
+**Du:** Keine offenen Aufgaben.
 
-**Fertig, wenn:** App lokal startet, Tests/Build bestehen und `main` auf GitHub liegt.
+**Abnahme:** `main` liegt auf GitHub; `npm run check` ist erfolgreich.
 
-### AP 2 – Supabase-Schema und Sicherheit
+### AP 2 – Supabase-Schema und Sicherheit · lokal vorbereitet
 
 **Codex:**
 
-- SQL-Migrationen für die Tabellen aus Kapitel 5 schreiben
-- Fremdschlüssel, Mengenregeln, Standardlagerorte und Gerätevorlagen anlegen
-- RLS und atomare Funktionen für Haushalt, Einladung, Mengenänderung, Undo und Löschung erstellen
-- Migrationen mit dem vorhandenen Projekt **KüchenDuett** verknüpfen und anwenden
-- RLS mit mindestens drei Testidentitäten prüfen
-
-**Du:** Einmal die Projektverknüpfung oder Datenbankänderung bestätigen, falls die CLI/Dashboard-Sitzung dies verlangt.
-
-**Fertig, wenn:** Migrationen reproduzierbar laufen und ein fremder Haushalt keinerlei Zugriff erhält.
-
-### AP 3 – Anmeldung und gemeinsamer Haushalt
-
-**Codex:** Registrierung, Login, Logout, Session, Profil, Haushalt erstellen sowie Einladung erzeugen/annehmen implementieren und testen.
+- [x] Supabase-Projektstruktur initialisiert
+- [x] Migration für alle elf Tabellen geschrieben
+- [x] Fremdschlüssel, Mengenregeln und Indizes definiert
+- [x] Standardlagerorte und Gerätevorlagen vorgesehen
+- [x] RLS-Policies für getrennte Haushalte erstellt
+- [x] Funktionen für Haushalt, Einladung, Menge, Undo und Löschung erstellt
+- [x] pgTAP/RLS-Test mit drei Identitäten geschrieben
+- [ ] Supabase-Projekt per CLI verknüpfen
+- [ ] `supabase db push --dry-run` prüfen
+- [ ] Migration auf **KüchenDuett** anwenden
+- [ ] `supabase db lint --linked` erfolgreich ausführen
+- [ ] `supabase test db --linked` erfolgreich ausführen
+- [ ] TypeScript-Datenbanktypen aus dem angewendeten Schema generieren
 
 **Du:**
 
-- In Supabase Auth E-Mail/Passwort und E-Mail-Bestätigung nach Codex-Anleitung aktivieren
-- zunächst `http://localhost:5173/**` als erlaubte Redirect-URL setzen
-- zwei E-Mail-Adressen für den realen Einladungstest verwenden und Bestätigungslinks anklicken
+- [ ] `npx supabase login` ausführen
+- [ ] Falls verlangt, das Datenbankpasswort nur direkt im Terminal eingeben
+- [ ] Das Anwenden der neuen Migration bestätigen
 
-**Fertig, wenn:** Beide Konten getrennt angemeldet sind und denselben Haushalt sehen.
+**Abnahme:** Migration, Linter und alle RLS-Tests laufen gegen das verknüpfte Projekt; ein fremder Haushalt erhält keinen Zugriff.
 
-### AP 4 – Inventar und Verlauf
-
-**Codex:**
-
-- Schnellerfassung und Bearbeiten von Name, Kategorie, Menge, Einheit, Lagerort, Ablauf-/Öffnungsdatum und Notiz
-- Suche, Filter und Ablauf-Sortierung
-- Erhöhen, Reduzieren, Verbrauchen, Löschen und Zusammenführen
-- zehn Sekunden Undo, Änderungsverlauf und Realtime-Aktualisierung
-- Konflikt-, Komponenten- und Datenbanktests
-
-**Du:** Zehn echte Beispielartikel erfassen und auf zwei Konten kurz prüfen, ob Mengen, Lagerorte und Ablaufanzeige verständlich sind.
-
-**Fertig, wenn:** Alle Inventaraktionen mobil funktionieren, keine Menge negativ wird und Partneränderungen sichtbar werden.
-
-### AP 5 – Geräte und Rezepte
+### AP 3 – Anmeldung und gemeinsamer Haushalt · offen
 
 **Codex:**
 
-- Standardgeräte sowie Panasonic SD-YR2550, kleinen Reiskocher und Tefal Ultracompact Sandwichmaker als editierbare Vorlagen anlegen
-- Geräte hinzufügen, ändern, deaktivieren und löschen
-- gespeicherte Rezepte, Zutaten, Favoriten und Filter implementieren
-- Vorschläge in „alles vorhanden“, „wenig fehlt“ und „nutzt bald Ablaufendes“ einteilen
-
-**Du:** Nur tatsächliche Fähigkeiten der drei Spezialgeräte und gewünschte eigene Rezepte bestätigen. Codex erfindet keine Geräteprogramme.
-
-**Fertig, wenn:** Rezepttreffer anhand Inventar und aktiven Geräten nachvollziehbar sind.
-
-### AP 6 – PWA, Datenschutz und Endtests
-
-**Codex:**
-
-- PWA-Manifest, Icons, Service Worker und Updatehinweis einrichten
-- JSON-Export, Inventar leeren, Haushalt verlassen/löschen und Konto löschen umsetzen
-- mobile Bedienung, Barrierefreiheit, Offline-/Fehlerzustände und Sicherheitsfälle testen
-- vollständigen Produktionsbuild und End-to-End-Test ausführen
-
-**Du:** App einmal auf dem Smartphone installieren und die Hauptabläufe sowie Löschwarnungen beurteilen.
-
-**Fertig, wenn:** Tests und Build grün sind, keine Secrets enthalten sind und die App mobil installierbar ist.
-
-### AP 7 – GitHub Pages veröffentlichen
-
-**Codex:**
-
-- GitHub-Actions-Workflow für Test, Build und Pages-Deployment erstellen
-- benötigte öffentliche Supabase-Werte als GitHub Repository Variables verwenden
-- Repository pushen und Workflow bis zum erfolgreichen Deployment überwachen
-- Produktions-URL und Auth-Weiterleitungen prüfen
+- [ ] Supabase-Client und validierte Umgebungsvariablen anbinden
+- [ ] Registrierung, Login, Logout und Session-Wiederaufnahme implementieren
+- [ ] Profil und geschützte Routen implementieren
+- [ ] Haushalt erstellen sowie Einladung erzeugen/annehmen
+- [ ] Lade-, Fehler- und abgelaufene Einladungszustände testen
 
 **Du:**
 
-1. Falls nicht automatisierbar: Repository → **Settings → Pages → Source: GitHub Actions** wählen.
-2. In Supabase → **Authentication → URL Configuration** setzen:
-   - Site URL: `https://simple42science.github.io/K-chenDuett/`
-   - zusätzliche Redirect-URL: `http://localhost:5173/**`
-   - Produktions-Redirect exakt gemäss der von Codex erzeugten Callback-URL
-3. Notwendige GitHub-/Supabase-Freigaben bestätigen.
+- [ ] In Supabase E-Mail/Passwort und E-Mail-Bestätigung nach Anleitung konfigurieren
+- [ ] Lokale Redirect-URL `http://localhost:5173/**` freigeben
+- [ ] Bestätigungslinks für zwei Testkonten anklicken
 
-**Fertig, wenn:** `https://simple42science.github.io/K-chenDuett/` lädt, Login/Bestätigungslink funktioniert und ein Push auf `main` automatisch neu veröffentlicht.
+**Abnahme:** Zwei getrennte Konten sehen sicher denselben Haushalt; ein drittes Konto bleibt ausgeschlossen.
 
-### AP 8 – Produktionsabnahme
+### AP 4 – Inventar und Verlauf · offen
 
-**Codex:** Automatisierte Tests erneut ausführen, RLS-Angriffstest wiederholen, Deployment-Logs prüfen und gefundene Fehler beheben.
+**Codex:**
 
-**Du:** Mit beiden Konten je einmal anmelden, einen Artikel hinzufügen, mit dem anderen Konto reduzieren, Undo testen, ein Rezept öffnen und die App installieren.
+- [ ] Schnellerfassung und Bearbeiten aller Inventarfelder
+- [ ] Suche, Filter und Ablauf-Sortierung
+- [ ] Erhöhen, Reduzieren, Verbrauchen, Löschen und Zusammenführen
+- [ ] Zehn-Sekunden-Undo und verständlichen Verlauf anbinden
+- [ ] Realtime-Aktualisierung und Versionskonflikte behandeln
+- [ ] Komponenten-, Datenbank- und Zwei-Konten-Tests ergänzen
 
-**Fertig, wenn:** Der komplette Ablauf auf der öffentlichen URL funktioniert. Dann ist das MVP veröffentlicht.
+**Du:**
 
-## 7. Abnahmekriterien
+- [ ] Zehn realistische Lebensmittel erfassen
+- [ ] Mengen- und Partneränderungen kurz auf zwei Konten prüfen
+
+**Abnahme:** Alle Inventaraktionen funktionieren mobil, Mengen werden nie negativ und Partneränderungen erscheinen zuverlässig.
+
+### AP 5 – Küchengeräte · offen
+
+**Codex:**
+
+- [ ] Geräteliste und Geräteeditor implementieren
+- [ ] Hinzufügen, Bearbeiten, Deaktivieren und Löschen umsetzen
+- [ ] Standardgeräte und bekannte Spezialgeräte anzeigen
+- [ ] Fähigkeiten für späteres Rezept-Matching strukturiert verwenden
+
+**Du:**
+
+- [ ] Fähigkeiten von Panasonic SD-YR2550, Reiskocher und Tefal-Sandwichmaker bestätigen
+
+**Abnahme:** Beide Konten verwalten dieselbe Ausstattung; deaktivierte Geräte gelten als nicht verfügbar.
+
+### AP 6 – Rezepte und Inventar-Matching · offen
+
+**Codex:**
+
+- [ ] Gespeicherte Rezepte, Zutaten und gemeinsame Favoriten implementieren
+- [ ] Aufwand, Zeiten, Mahlzeit, Ernährung und Geräte filterbar machen
+- [ ] Zutaten mit sicheren Einheitenumrechnungen abgleichen
+- [ ] Treffer als „alles vorhanden“, „wenig fehlt“ und „nutzt bald Ablaufendes“ einteilen
+- [ ] Treffergründe verständlich anzeigen und Fachlogik testen
+
+**Du:**
+
+- [ ] Gewünschte eigene Rezepte bzw. Testrezepte bestätigen
+- [ ] Fünf typische Rezepttreffer kurz beurteilen
+
+**Abnahme:** Vorschläge sind ohne KI nachvollziehbar und passen zu Inventar, Zeit und aktiven Geräten.
+
+### AP 7 – PWA und Datenschutz · offen
+
+**Codex:**
+
+- [ ] PWA-Manifest, Icons, Service Worker und Updatehinweis
+- [ ] App-Shell offline verfügbar machen; Schreibaktionen ehrlich als onlinepflichtig behandeln
+- [ ] JSON-Export implementieren
+- [ ] Inventar leeren, Haushalt verlassen/löschen und Konto löschen
+- [ ] Barrierefreiheit, mobile Bedienung und Sicherheitsfälle testen
+
+**Du:**
+
+- [ ] App auf dem Smartphone installieren und Hauptabläufe prüfen
+- [ ] Endgültige Löschwarnungen beurteilen
+
+**Abnahme:** Die PWA ist installierbar; Export und Löschwege funktionieren sicher und verständlich.
+
+### AP 8 – GitHub Pages Deployment · offen
+
+**Codex:**
+
+- [ ] Pages-Workflow für Test, Build und Deployment erstellen
+- [ ] Öffentliche Supabase-Werte als GitHub Repository Variables anbinden
+- [ ] GitHub Pages auf Actions als Quelle konfigurieren, soweit per CLI möglich
+- [ ] Deployment bis zum erfolgreichen Lauf überwachen
+- [ ] Asset-Pfade und Produktions-URL prüfen
+
+**Du:**
+
+- [ ] Falls nötig unter **Settings → Pages → Source: GitHub Actions** bestätigen
+- [ ] In Supabase die Site URL `https://simple42science.github.io/K-chenDuett/` eintragen
+- [ ] Lokale und exakte produktive Auth-Redirect-URLs freigeben
+
+**Abnahme:** Die Produktions-URL lädt; Login funktioniert; jeder erfolgreiche Push auf `main` veröffentlicht automatisch.
+
+### AP 9 – Produktionsabnahme · offen
+
+**Codex:**
+
+- [ ] Vollständige automatisierte Prüfungen ausführen
+- [ ] RLS-Angriffstest wiederholen
+- [ ] GitHub-Actions- und Browserfehler prüfen und beheben
+- [ ] Abnahmeprotokoll erstellen
+
+**Du:**
+
+- [ ] Mit beiden Konten den kompletten Hauptablauf auf der öffentlichen URL testen
+
+**Abnahme:** Konto, Haushalt, Inventar, Undo, Geräte, Rezepte, Export, Installation und Löschung funktionieren produktiv.
+
+### AP 10 – Betrieb, Backup und Wartung · nach MVP
+
+**Codex:**
+
+- [ ] Monatliche Export-/Backup-Checkliste dokumentieren
+- [ ] Wiederherstellung eines Exports mit Testdaten prüfen
+- [ ] Supabase- und GitHub-Free-Tier-Grenzen dokumentieren
+- [ ] Sichere Abhängigkeitsupdates und regelmässigen Qualitätslauf einrichten
+- [ ] Kleine Fehler- und Wartungsliste führen
+
+**Du:**
+
+- [ ] Monatlich bzw. vor grossen Änderungen einen Export herunterladen
+- [ ] Kosten-/Quota-Hinweise gelegentlich kontrollieren
+
+**Abnahme:** Daten können gesichert und testweise wiederhergestellt werden; Wartung verursacht keine unerwarteten Kosten.
+
+### AP 11 – Optionale Erweiterungen · erst nach stabilem MVP
+
+Reihenfolge nach tatsächlichem Bedarf:
+
+1. [ ] gemeinsame Einkaufsliste aus fehlenden Rezeptzutaten
+2. [ ] Barcode-Scanner mit manueller Bestätigung
+3. [ ] Ablauf-Erinnerungen/Push-Mitteilungen
+4. [ ] Spracheingabe
+5. [ ] Foto- oder Kassenzettelerkennung
+6. [ ] kostenbegrenzte KI-Rezepte mit Serverfunktion und austauschbarem Anbieter
+
+Für jede Erweiterung entscheidet **du** nur Nutzen und Budget; **Codex** übernimmt Architektur, Umsetzung, Datenschutzprüfung und Tests.
+
+## 6. MVP-Abnahmekriterien
 
 - [ ] Zwei Konten arbeiten sicher im selben Haushalt.
 - [ ] Ein fremder Haushalt kann keine Daten lesen oder verändern.
@@ -202,13 +290,20 @@ Die Arbeitspakete werden in dieser Reihenfolge erledigt. Codex arbeitet jeweils 
 - [ ] Geräte und deterministische Rezeptvorschläge funktionieren ohne KI.
 - [ ] Die PWA ist mobil installierbar.
 - [ ] Export und Löschwege funktionieren mit klarer Bestätigung.
-- [ ] Tests und Produktionsbuild bestehen.
-- [ ] Keine geheimen Schlüssel liegen im Repository oder Browser-Bundle.
+- [x] Lokale Tests und Produktionsbuild bestehen im aktuellen Grundgerüst.
+- [x] Aktuell liegen keine geheimen Schlüssel im Repository oder Browser-Bundle.
+- [ ] RLS-Tests bestehen gegen das verknüpfte Supabase-Projekt.
 - [ ] GitHub Pages veröffentlicht automatisch aus `main`.
 - [ ] Laufende Infrastrukturkosten bleiben bei 0 CHF.
 
-## 8. Direkter nächster Schritt
+## 7. Direkter nächster Schritt
 
-Du erledigst nur **AP 0, Schritt 1** (`gh auth refresh -h github.com`) und meldest dich danach mit „GitHub ist angemeldet“. Anschliessend kann Codex AP 0 prüfen und die Arbeitspakete 1–8 weitgehend selbstständig abarbeiten.
+Du führst im Projektterminal nur diesen persönlichen Login aus:
 
-Offizielle Referenzen: [GitHub Pages mit Actions](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site), [GitHub Pages Custom Workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages), [Supabase Auth Redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls).
+```powershell
+npx supabase login
+```
+
+Danach schreibst du **„Supabase ist angemeldet“**. Codex erledigt anschliessend die noch offenen Punkte aus AP2: Projekt finden/verknüpfen, Dry-Run, Migration, Linter, RLS-Tests und TypeScript-Typen.
+
+Referenzen: [GitHub Pages mit Actions](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) · [Supabase Auth Redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls)

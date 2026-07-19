@@ -1,0 +1,2 @@
+-- Haushaltsbezogene Startwerte werden atomar durch create_household() erzeugt.
+-- Globale kuratierte Rezepte folgen erst in AP5.

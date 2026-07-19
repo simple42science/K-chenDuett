@@ -45,11 +45,11 @@ Nicht Teil dieser Veröffentlichung: KI, Barcode, Spracheingabe, Foto-/Kassenzet
 - **Sicherheit:** Row Level Security auf allen Haushaltsdaten
 - **Hosting:** GitHub Pages
 - **Deployment:** GitHub Actions bei jedem Push auf `main`
-- **Repository:** `kuechen-duett`, öffentlich für kostenloses GitHub Pages
-- **Produktions-URL:** voraussichtlich `https://yannickluca.github.io/kuechen-duett/`
+- **Repository:** `K-chenDuett`, öffentlich für kostenloses GitHub Pages
+- **Produktions-URL:** `https://simple42science.github.io/K-chenDuett/`
 - **Kosten:** 0 CHF/Monat innerhalb der kostenlosen Kontingente; keine Domain und keine KI-API
 
-Vite erhält den Basis-Pfad `/kuechen-duett/`. Dynamische Inventardaten werden nicht vom Service Worker gecacht; offline startet nur die App-Oberfläche. GitHub Pages veröffentlicht das gebaute `dist`-Verzeichnis über einen offiziellen Actions-Workflow.
+Vite erhält den Basis-Pfad `/K-chenDuett/`. Dynamische Inventardaten werden nicht vom Service Worker gecacht; offline startet nur die App-Oberfläche. GitHub Pages veröffentlicht das gebaute `dist`-Verzeichnis über einen offiziellen Actions-Workflow.
 
 ## 5. Minimales Datenmodell
 
@@ -78,7 +78,7 @@ Die Arbeitspakete werden in dieser Reihenfolge erledigt. Codex arbeitet jeweils 
 **Du:**
 
 1. In PowerShell `gh auth refresh -h github.com` ausführen und das Konto `YannickLuca` erneut autorisieren.
-2. Bestätigen, dass das Repository `kuechen-duett` öffentlich sein darf. Bei GitHub Free ist das für kostenloses GitHub Pages erforderlich.
+2. Bestätigen, dass das Repository `K-chenDuett` öffentlich sein darf. Bei GitHub Free ist das für kostenloses GitHub Pages erforderlich.
 3. Im Supabase-Dashboard bereithalten: Project URL und Publishable-/Anon-Key. Keinen Secret-/Service-Role-Key teilen.
 4. Falls Codex das Supabase-Projekt direkt verknüpfen soll, die Supabase-CLI persönlich anmelden; Codex gibt dafür bei Bedarf den exakten Befehl aus.
 
@@ -90,7 +90,7 @@ Die Arbeitspakete werden in dieser Reihenfolge erledigt. Codex arbeitet jeweils 
 
 **Codex:**
 
-- Git-Repository initialisieren und GitHub-Repository `kuechen-duett` erstellen/verbinden
+- Git-Repository initialisieren und GitHub-Repository `K-chenDuett` erstellen/verbinden
 - React-/TypeScript-/Vite-App einrichten
 - mobile Navigation, Hash-Router, Fehlerzustände und Grunddesign erstellen
 - `.gitignore`, `.env.example`, README, Tests und Produktionsbuild einrichten
@@ -179,12 +179,12 @@ Die Arbeitspakete werden in dieser Reihenfolge erledigt. Codex arbeitet jeweils 
 
 1. Falls nicht automatisierbar: Repository → **Settings → Pages → Source: GitHub Actions** wählen.
 2. In Supabase → **Authentication → URL Configuration** setzen:
-   - Site URL: `https://yannickluca.github.io/kuechen-duett/`
+   - Site URL: `https://simple42science.github.io/K-chenDuett/`
    - zusätzliche Redirect-URL: `http://localhost:5173/**`
    - Produktions-Redirect exakt gemäss der von Codex erzeugten Callback-URL
 3. Notwendige GitHub-/Supabase-Freigaben bestätigen.
 
-**Fertig, wenn:** `https://yannickluca.github.io/kuechen-duett/` lädt, Login/Bestätigungslink funktioniert und ein Push auf `main` automatisch neu veröffentlicht.
+**Fertig, wenn:** `https://simple42science.github.io/K-chenDuett/` lädt, Login/Bestätigungslink funktioniert und ein Push auf `main` automatisch neu veröffentlicht.
 
 ### AP 8 – Produktionsabnahme
 

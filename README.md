@@ -51,6 +51,6 @@ npx supabase db push
 
 ## Deployment
 
-Das Ziel ist GitHub Pages unter `/kuechen-duett/`. Der eigentliche Pages-Workflow wird in AP7 ergänzt; bis dahin prüft `.github/workflows/ci.yml` jeden Push und Pull Request.
+Das Ziel ist GitHub Pages unter `/K-chenDuett/`. Der eigentliche Pages-Workflow wird in AP7 ergänzt; bis dahin prüft `.github/workflows/ci.yml` jeden Push und Pull Request.
 
 Siehe [PROJECT_PLAN.md](./PROJECT_PLAN.md) für Umfang und Arbeitspakete.
